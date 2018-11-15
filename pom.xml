@@ -20,6 +20,7 @@
     <modules>
         <module>demo-eureka</module>
         <module>demo-resource</module>
+        <module>demo-auth</module>
     </modules>
 
     <properties>

@@ -9,17 +9,16 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
  * Created by ouyanggang on 2018/11/15.
  */
 @Configuration
-@EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   @Override
   public void configure(HttpSecurity http) throws Exception {
-    http.
-        csrf().disable()
-        .authorizeRequests()
-        .mvcMatchers("/v2/api-docs").permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .httpBasic();
+    super.configure(http);
+    http
+            .authorizeRequests()
+            .antMatchers("/login").permitAll()
+            .antMatchers("/res","/res2/res");
+//            .access("#oauth2.hasScope('read') and hasRole('USER')");
   }
+
 }

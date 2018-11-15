@@ -3,6 +3,7 @@ package com.example.demoauth.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -39,7 +40,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
             .withClient("demoApp")
-            .secret("demoAppSecret")
+            .secret(new BCryptPasswordEncoder().encode("demoAppSecret"))
             .redirectUris("http://baidu.com")
             .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token",
                 "password", "implicit")
