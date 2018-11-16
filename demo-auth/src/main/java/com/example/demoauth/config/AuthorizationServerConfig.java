@@ -41,7 +41,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
             .withClient("demoApp")
             .secret(new BCryptPasswordEncoder().encode("demoAppSecret"))
-            .redirectUris("http://baidu.com")
+            //.redirectUris("http://baidu.com")
             .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token",
                 "password", "implicit")
             .scopes("all")
