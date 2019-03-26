@@ -46,13 +46,25 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 //            .antMatchers("/login").permitAll()
 //            .antMatchers("/res","/res2/res");
 //            .access("#oauth2.hasScope('read') and hasRole('USER')");
-    http.
-        csrf().disable()
-        .authorizeRequests()
-        .mvcMatchers("/v2/api-docs").permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .httpBasic();
+//    http.
+//        csrf().disable()
+//        .authorizeRequests()
+//        .mvcMatchers("/v2/api-docs").permitAll()
+//        .anyRequest().authenticated()
+//        .and()
+//        .httpBasic();
+    http
+
+//                .sessionManagement()
+//                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                    .and()
+            .requestMatchers()
+            // 保险起见，防止被主过滤器链路拦截
+            .antMatchers("/**").and()
+            .authorizeRequests().anyRequest().authenticated()
+            .and()
+            .authorizeRequests()
+            .antMatchers("/**").access("#oauth2.hasScope('all')");
   }
 
 //  @Primary

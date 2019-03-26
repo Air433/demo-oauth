@@ -11,7 +11,7 @@ eureka:
     lease-expiration-duration-in-seconds: 10
   client:
       service-url:
-        defaultZone: http://localhost:9010/eureka/
+        defaultZone: http://localhost:6379/eureka/
 security:
   oauth2:
 #    client:
@@ -22,9 +22,17 @@ security:
 #      scope: read
 #      access-token-uri: http://localhost:9015/oauth/token
     resource:
-        id: oauth2-resource
+        id: resource
+#        token-info-uri: http://localhost:9015/oauth/check_token
         user-info-uri: http://localhost:9015/user
         prefer-token-info: false
+
+    client:
+        clientId: demoApp
+        clientSecret: demoAppSecret
+        accessTokenUri: http://localhost:9015/oauth/token
+        grant-type: client_credentials,password,authorization_code
+        scope: all
 #      jwt:
 #        key-uri: http://localhost:9015/oauth/token_key
 #  basic:

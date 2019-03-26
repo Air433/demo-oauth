@@ -1,8 +1,10 @@
 package com.example.demoauth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -19,12 +21,16 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 @EnableAuthorizationServer //提供/oauth/authorize,/oauth/token,/oauth/check_token,/oauth/confirm_access,/oauth/error
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
+    @Autowired
+    @Qualifier("UserDetailsService-a")
+    private UserDetailsService userDetailsService;
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer
             .realm("oauth2-resources")
             .tokenKeyAccess("permitAll()") //url:/oauth/token_key,exposes public key for token verification if using JWT tokens
-            .checkTokenAccess("isAuthenticated()") //url:/oauth/check_token allow check token
+            .checkTokenAccess("permitAll()") //url:/oauth/check_token allow check token
             .allowFormAuthenticationForClients();
     }
 
@@ -33,7 +39,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager);
+        endpoints.userDetailsService(userDetailsService)
+                .authenticationManager(authenticationManager);
     }
 
     @Override
@@ -41,11 +48,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
             .withClient("demoApp")
             .secret(new BCryptPasswordEncoder().encode("demoAppSecret"))
+//                .secret("demoAppSecret")
             //.redirectUris("http://baidu.com")
             .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token",
                 "password", "implicit")
             .scopes("all")
-            .resourceIds("oauth2-resource")
+            .resourceIds("oauth2-resource", "resource")
             .accessTokenValiditySeconds(1200)
             .refreshTokenValiditySeconds(50000);
     }
