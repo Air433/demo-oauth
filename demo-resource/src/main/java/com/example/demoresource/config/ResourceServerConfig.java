@@ -53,16 +53,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 //        .anyRequest().authenticated()
 //        .and()
 //        .httpBasic();
-    http
+    http.csrf().disable()
 
 //                .sessionManagement()
 //                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 //                    .and()
-            .requestMatchers()
-            // 保险起见，防止被主过滤器链路拦截
-            .antMatchers("/**").and()
-            .authorizeRequests().anyRequest().authenticated()
-            .and()
+//            .requestMatchers()
+//            // 保险起见，防止被主过滤器链路拦截
+//            .antMatchers("/**").and()
+//            .authorizeRequests().anyRequest().authenticated()
+//            .and()
             .authorizeRequests()
             .antMatchers("/**").access("#oauth2.hasScope('all')");
   }

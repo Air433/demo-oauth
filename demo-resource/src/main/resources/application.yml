@@ -23,16 +23,17 @@ security:
 #      access-token-uri: http://localhost:9015/oauth/token
     resource:
         id: resource
-#        token-info-uri: http://localhost:9015/oauth/check_token
+        token-info-uri: http://localhost:9015/oauth/check_token
         user-info-uri: http://localhost:9015/user
-        prefer-token-info: false
+        prefer-token-info: true
 
     client:
-        clientId: demoApp
-        clientSecret: demoAppSecret
-        accessTokenUri: http://localhost:9015/oauth/token
+        client-id: admin
+        client-secret: admin
+        access-token-uri: http://localhost:9015/oauth/token
         grant-type: client_credentials,password,authorization_code
         scope: all
+        user-authorization-uri: http://localhost:9015/oauth/authorize
 #      jwt:
 #        key-uri: http://localhost:9015/oauth/token_key
 #  basic:

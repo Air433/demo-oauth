@@ -31,6 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   private AuthenticationManagerBuilder authenticationManagerBuilder;
+
+
   /**
    * 1\这里记得设置requestMatchers,不拦截需要token验证的url
    * 不然会优先被这个filter拦截,走用户端的认证而不是token认证
@@ -47,26 +49,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        .and()
 //        .formLogin().permitAll();
     http
-            .requestMatchers().antMatchers("/oauth/**","/login/**","/logout/**")
-            .and()
-            .authorizeRequests()
-            .anyRequest().authenticated()
-            .and()
-            .formLogin().and()
-            .csrf().disable()
-            .httpBasic();
+            .authorizeRequests().antMatchers("/oauth/**","/login/**","/logout/**").permitAll()
+            .and().formLogin().permitAll()
+            .and().authorizeRequests().anyRequest().authenticated()
+            .and().csrf().disable();
 
   }
 
 
-  @Bean
-  @Override
-  protected UserDetailsService userDetailsService(){
-    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-    manager.createUser(User.withUsername("demoUser1").password("123456").authorities("USER").build());
-    manager.createUser(User.withUsername("demoUser2").password("123456").authorities("USER").build());
-    return manager;
-  }
+//  @Bean
+//  @Override
+//  protected UserDetailsService userDetailsService(){
+//    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+//    manager.createUser(User.withUsername("demoUser1").password("123456").authorities("USER").build());
+//    manager.createUser(User.withUsername("demoUser2").password("123456").authorities("USER").build());
+//    return manager;
+//  }
 
   /**
    * support password grant type
